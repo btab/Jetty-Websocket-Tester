@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
   <head>
-    <title>Videojuicer Addon Service - Test Console</title>
+    <title>Jetty Websocket Tester</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     
   <style type="text/css" media="screen">
@@ -30,14 +30,7 @@
     
     $('#status').text('connecting');
     
-    socket.onopen = function (event) { $('#status').text('opened');
-    // TODO: remove once WS blocking issue is fixed
-    // send("titlebar", "#set", {})
-    // send("titlebar", "#setUI", {"//controls/timeline/play-head": "SliderHead", "//#viewport": "SMILKitViewport", "//controls/volume-toggle": "Button", "//controls": "ControlBar", "//playback-toggle-overlay": "Button", "//controls/timeline": "Slider", "//controls/share-toggle/share-menu/permalink-item": "MenuItem", "//controls/volume-toggle/volume-slider/volume-head": "SliderHead", "//controls/share-toggle": "Button", "//controls/share-toggle/share-menu": "Menu", "//controls/volume-toggle/volume-slider": "Slider", "//controls/playback-toggle": "Button", "//controls/fullscreen-toggle": "Button"})
-    // send("titlebar", "#setEmbed", {})
-    // send("titlebar", "init", {}) 
-    };
-    
+    socket.onopen = function (event) { $('#status').text('opened'); }
     socket.onerror = function (event) { $('#status').text('error - closing'); socket.close(); }
     socket.onclose = function (event) { $('#status').text('closed'); $('form').fadeOut(); }
     socket.onmessage = function(event) { $('#messages').append(messageItem('recv', event.data)); }
