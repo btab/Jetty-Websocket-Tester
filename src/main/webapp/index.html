@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+  <head>
+    <title>Videojuicer Addon Service - Test Console</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    
+  <style type="text/css" media="screen">
+    li.send  { color: blue;  }
+    li.recv  { color: green; }
+    li.error { color: red;   }
+    
+    ul {
+      clear: both;
+      padding-top: 10px;
+    }
+  </style>
+  
+  <script type="text/javascript" src="jquery.js"></script>
+  
+  <script type="text/javascript" charset="utf-8">
+  var socket;
+  
+  function connect() {
+    try {
+      socket = new WebSocket('ws://' + window.location.host + '/dispatch');
+    } catch(e) {
+      $('body').html('<p>Your browser doesn\'t seem to support native web sockets. Please try <a href="http://www.apple.com/safari">Safari</a> instead.</p>');
+      return;
+    }
+    
+    $('#status').text('connecting');
+    
+    socket.onopen = function (event) { $('#status').text('opened');
+    // TODO: remove once WS blocking issue is fixed
+    // send("titlebar", "#set", {})
+    // send("titlebar", "#setUI", {"//controls/timeline/play-head": "SliderHead", "//#viewport": "SMILKitViewport", "//controls/volume-toggle": "Button", "//controls": "ControlBar", "//playback-toggle-overlay": "Button", "//controls/timeline": "Slider", "//controls/share-toggle/share-menu/permalink-item": "MenuItem", "//controls/volume-toggle/volume-slider/volume-head": "SliderHead", "//controls/share-toggle": "Button", "//controls/share-toggle/share-menu": "Menu", "//controls/volume-toggle/volume-slider": "Slider", "//controls/playback-toggle": "Button", "//controls/fullscreen-toggle": "Button"})
+    // send("titlebar", "#setEmbed", {})
+    // send("titlebar", "init", {}) 
+    };
+    
+    socket.onerror = function (event) { $('#status').text('error - closing'); socket.close(); }
+    socket.onclose = function (event) { $('#status').text('closed'); $('form').fadeOut(); }
+    socket.onmessage = function(event) { $('#messages').append(messageItem('recv', event.data)); }
+  }
+  
+  function messageItem(type, data, error) {
+    var classes = [type];
+    if (error) classes.push('error');
+    return '<li class="' + classes.join(' ') + '"> <code class="type">[' + type + ']</code> <code class="message">' + data + '</code> </li>';
+  }
+  
+  function sendForm() {
+    try {
+      var string = $('#string').val();
+      var times = parseInt($('#times').val());
+      
+      while(times > 0) {
+        socket.send(string);
+        $('#messages').append(messageItem('send', string));
+        times -= 1;
+      }
+    } catch (e) {
+      alert(e);
+    }
+  }
+  
+  $(document).ready(connect);
+  </script>
+  </head>
+  
+  <body>
+  <p>Socket: <strong id='status'></strong> </p>
+  
+  <form action="javascript:sendForm()">
+    <p>
+      <input type="submit" value="Send">
+      <input type="text" value="this string" id="string" size="100" />
+      <input type="text" value="1" id="times" size="4"/> times
+    </p>
+  </form>
+  
+  <ul id="messages"></ul>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Jetty Websocket Tester Service</display-name>
+  
+  <!-- Main Servlet -->
+  
+  <servlet>
+    <servlet-name>TesterServlet</servlet-name>
+    <servlet-class>com.bluetheta.jwtester.Servlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>TesterServlet</servlet-name>
+    <url-pattern>/dispatch</url-pattern>
+  </servlet-mapping>
+</web-app>
