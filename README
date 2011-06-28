@@ -1,0 +1,1 @@
+See the problem output PNG for an illustration where the client sends a batch of 5 messages twice and then a single message twice. Note that subsequent messages flush undelivered previous ones. Note this is mirrored on the console from the println statement in the test code (so it's not an artefact of the client).
