@@ -2,12 +2,19 @@ package com.bluetheta.jwtester
 
 import javax.servlet.http._
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.servlet.{ServletContextHandler, ServletHolder}
 import org.eclipse.jetty.websocket._
 import org.eclipse.jetty.websocket.WebSocket._
 
-class Application extends App {
+object Application extends App {
   val server = new Server(8080)
-  server.setHandler(new Servlet)
+  
+  val root = new ServletContextHandler(ServletContextHandler.SESSIONS)
+  root.setContextPath("/")
+  server.setHandler(root)
+  
+  root.addServlet(new ServletHolder(new Servlet), "/dispatch")
+  
   server.start
   server.join
 }
