@@ -5,9 +5,10 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     
   <style type="text/css" media="screen">
+    form#send { display: none; }
+    
     li.send  { color: blue;  }
     li.recv  { color: green; }
-    li.error { color: red;   }
     
     ul {
       clear: both;
@@ -22,7 +23,7 @@
   
   function connect() {
     try {
-      socket = new WebSocket('ws://' + window.location.host + '/dispatch');
+      socket = new WebSocket($('#uri').val());
     } catch(e) {
       $('body').html('<p>Your browser doesn\'t seem to support native web sockets. Please try <a href="http://www.apple.com/safari">Safari</a> instead.</p>');
       return;
@@ -30,9 +31,9 @@
     
     $('#status').text('connecting');
     
-    socket.onopen = function (event) { $('#status').text('opened'); }
+    socket.onopen = function (event) { $('#status').text('opened'); $('#connect').fadeOut(); $('#send').fadeIn(); }
     socket.onerror = function (event) { $('#status').text('error - closing'); socket.close(); }
-    socket.onclose = function (event) { $('#status').text('closed'); $('form').fadeOut(); }
+    socket.onclose = function (event) { $('#status').text('closed'); $('#connect').fadeIn(); $('#send').fadeOut(); }
     socket.onmessage = function(event) { $('#messages').append(messageItem('recv', event.data)); }
   }
   
@@ -56,15 +57,20 @@
       alert(e);
     }
   }
-  
-  $(document).ready(connect);
   </script>
   </head>
   
   <body>
-  <p>Socket: <strong id='status'></strong> </p>
+  <form action="javascript:connect()" id="connect">
+    <p>
+      <input type="submit" value="Open"> web socket connection to
+      <input type="text" value="ws://localhost:8080/dispatch" id="uri" size="100" />
+    </p>
+  </form>
   
-  <form action="javascript:sendForm()">
+  <p>Socket: <strong id='status'>to be opened</strong> </p>
+  
+  <form action="javascript:sendForm()" id="send">
     <p>
       <input type="submit" value="Send">
       <input type="text" value="this string" id="string" size="100" />
