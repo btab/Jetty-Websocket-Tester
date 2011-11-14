@@ -22,7 +22,7 @@ scalacOptions ++= Seq("-deprecation", "-unchecked")
 // Managed libraries
 
 libraryDependencies ++= Seq(
-  "org.eclipse.jetty"  % "jetty-client"    % "7.4.2.v20110526" % "compile,test",
-  "org.eclipse.jetty"  % "jetty-webapp"    % "7.4.2.v20110526" % "compile,test",
-  "org.eclipse.jetty"  % "jetty-websocket" % "7.4.2.v20110526" % "compile,test"
+  "org.eclipse.jetty"  % "jetty-client"    % "7.5.4.v20111024" % "compile,test",
+  "org.eclipse.jetty"  % "jetty-webapp"    % "7.5.4.v20111024" % "compile,test",
+  "org.eclipse.jetty"  % "jetty-websocket" % "7.5.4.v20111024" % "compile,test"
 )
